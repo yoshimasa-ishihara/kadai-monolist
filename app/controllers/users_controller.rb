@@ -1,7 +1,13 @@
 class UsersController < ApplicationController
   before_action :require_user_logged_in, only: [:show]
+  
   def show
-    @user=User.find(params[:id])
+    @user = User.find(params[:id])
+    @items = @user.items.uniq
+    @wants = @user.want_items
+    @haves = @user.have_items
+    @count_want = @user.want_items.count
+    @count_have = @user.have_items.count
   end
 
   def new
@@ -12,6 +18,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
 
     if @user.save
+      
       flash[:success] = 'ユーザを登録しました。'
       redirect_to @user
     else
